@@ -1,0 +1,1 @@
+# Stub → later replace with POS integration

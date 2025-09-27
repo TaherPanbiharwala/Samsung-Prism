@@ -1,0 +1,1958 @@
+[
+  {
+    "id": "S001",
+    "name": "Cream of Vegetable Soup",
+    "price": 230,
+    "description": "Cream soup with vegetables and a dash of cream",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S002",
+    "name": "Cream of Mushroom Soup",
+    "price": 230,
+    "description": "Cream soup with mushroom and a dash of cream",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "mushroom",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S003",
+    "name": "Cream of Tomato Soup",
+    "price": 230,
+    "description": "Cream soup with tomato and a dash of cream",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "tomato",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S004",
+    "name": "Sweet Corn Veg Soup",
+    "price": 230,
+    "description": "A fine blend of vegetables & sweet corn",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "sweet corn",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S005",
+    "name": "Veg Manchow Soup",
+    "price": 230,
+    "description": "A fine blend of vegetables, mushroom and spices garnished with fried noodles",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S006",
+    "name": "Veg Clear Soup",
+    "price": 230,
+    "description": "Garden vegetables served in vegetable broth with flavours of onion and garlic",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "clear",
+      "healthy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S007",
+    "name": "Corn Potato Chowder Soup",
+    "price": 230,
+    "description": "Velvety blend of potatoes, sweet corn, garlic and celery, harmonized with aromatic spices",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "chowder",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S008",
+    "name": "Tomato Basil Soup",
+    "price": 230,
+    "description": "Ripe tomatoes, fresh basil, garlic, onions and cream served with garlic grissini",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "italian",
+      "herby",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S009",
+    "name": "Tom Kha Veg Soup",
+    "price": 230,
+    "description": "Thai coconut milk, galangal, lemongrass, basil, shiitake mushroom, choice of vegetables",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "thai",
+      "coconut",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S010",
+    "name": "Hot & Spicy Veg Dumpling Soup",
+    "price": 230,
+    "description": "Comforting Asian broth infused with hot spices, served with tender steamed veg dumplings",
+    "tags": [
+      "vegetarian",
+      "soup",
+      "dumplings",
+      "spicy",
+      "asian",
+      "vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S101",
+    "name": "Hot & Spicy Chicken Dumpling Soup",
+    "price": 255,
+    "description": "Comforting Asian broth infused with hot spices, served with tender steamed chicken dumplings",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "chicken",
+      "dumplings",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S102",
+    "name": "Tom Kha Chicken",
+    "price": 255,
+    "description": "Thai coconut milk, galangal, lemongrass, basil, shiitake mushroom & succulent chicken",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "thai",
+      "coconut",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S103",
+    "name": "Sutta Kozhi Rasam",
+    "price": 255,
+    "description": "Charred smoked fiery chicken broth",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "south indian",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S104",
+    "name": "Nenju Elumbu Saaru",
+    "price": 255,
+    "description": "Savoury and spicy mutton ribs broth",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "mutton",
+      "broth",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S105",
+    "name": "Chicken Manchow",
+    "price": 255,
+    "description": "Variety of vegetables, scallions, and chicken, thickened with broth and corn flour, and seasoned with spices",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "chicken",
+      "asian",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "S106",
+    "name": "Sweet Corn Chicken Soup",
+    "price": 255,
+    "description": "A fine blend of sweet corn in chicken broth topped with sliced chicken",
+    "tags": [
+      "non-vegetarian",
+      "soup",
+      "chicken",
+      "sweet corn",
+      "non_vegetarian"
+    ],
+    "category": "soups"
+  },
+  {
+    "id": "SL001",
+    "name": "Green Apple Walnut Salad with Pomegranate & Cranberry Maple Molasses",
+    "price": 295,
+    "description": "Crunchy granny smith apples, candied walnuts, pomegranate pearls and cranberry maple molasses dressing",
+    "tags": [
+      "vegetarian",
+      "salad",
+      "fruity",
+      "nuts",
+      "vegetarian"
+    ],
+    "category": "salads"
+  },
+  {
+    "id": "SL002",
+    "name": "Thai Som Tam Salad",
+    "price": 295,
+    "description": "Green mango, raw papaya, crunchy peanuts, bird's eye chillis and cilantro in a tangy dressing",
+    "tags": [
+      "vegetarian",
+      "salad",
+      "thai",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "salads"
+  },
+  {
+    "id": "SL003",
+    "name": "Japanese Teriyaki Tofu Salad",
+    "price": 295,
+    "description": "Tofu with sweet Japanese teriyaki sauce mixed lettuces, cherry tomatoes and tempura crisps",
+    "tags": [
+      "vegetarian",
+      "salad",
+      "tofu",
+      "japanese",
+      "vegetarian"
+    ],
+    "category": "salads"
+  },
+  {
+    "id": "SL101",
+    "name": "Smoked Chicken Caesar Salad",
+    "price": 320,
+    "description": "Smoky grilled chicken with lettuce, garlic croutons, cherry tomatoes, parmesan and Caesar dressing",
+    "tags": [
+      "non-vegetarian",
+      "salad",
+      "chicken",
+      "caesar",
+      "non_vegetarian"
+    ],
+    "category": "salads"
+  },
+  {
+    "id": "SL102",
+    "name": "Japanese Teriyaki Chicken Salad",
+    "price": 320,
+    "description": "Chicken with sweet Japanese teriyaki sauce mixed lettuces, cherry tomatoes and tempura crisps",
+    "tags": [
+      "non-vegetarian",
+      "salad",
+      "chicken",
+      "japanese",
+      "non_vegetarian"
+    ],
+    "category": "salads"
+  },
+  {
+    "id": "VS001",
+    "name": "Avakkai Paneer Tikka",
+    "price": 360,
+    "description": "Paneer marinated in spicy Avakkai (Raw Mango) pickle masala, served with mint chutney",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "paneer",
+      "tandoor",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS002",
+    "name": "Mushroom Cheese Kebab",
+    "price": 360,
+    "description": "Succulent char-grilled mushrooms enveloped in creamy cheese served with mint chutney",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "mushroom",
+      "grilled",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS003",
+    "name": "Malai Basil Broccoli",
+    "price": 385,
+    "description": "Tandoor-roasted broccoli in a creamy basil marinade, served with mint chutney",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "broccoli",
+      "tandoor",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS004",
+    "name": "Shanghai Chilli Veg Dry",
+    "price": 320,
+    "description": "A mix of vegetables, stir-fried in a spicy Shanghai-style chilli sauce",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS005",
+    "name": "Shanghai Chilli Paneer Dry",
+    "price": 425,
+    "description": "Paneer stir-fried in a spicy Shanghai-style chilli sauce",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "paneer",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS006",
+    "name": "Schezwan Wok Tossed Veg Dry",
+    "price": 320,
+    "description": "Vegetables stir-fried in Schezwan sauces and spices",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "schezwan",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS007",
+    "name": "Schezwan Wok Tossed Paneer Dry",
+    "price": 425,
+    "description": "Paneer stir-fried in Schezwan sauces and spices",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "paneer",
+      "schezwan",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS008",
+    "name": "Paneer 65",
+    "price": 360,
+    "description": "Classic fried spicy paneer 65",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "paneer",
+      "fried",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS009",
+    "name": "Mushroom 65",
+    "price": 335,
+    "description": "Crispy fried mushroom with spicy masala",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "mushroom",
+      "fried",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VS010",
+    "name": "Gobi 65",
+    "price": 320,
+    "description": "Crispy fried cauliflower in spicy masala",
+    "tags": [
+      "vegetarian",
+      "starter",
+      "gobi",
+      "fried",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS001",
+    "name": "Mangalore Ghee Roasted Chicken",
+    "price": 425,
+    "description": "Tender chicken bathed in a rich blend of traditional Mangalorean spices, roasted in ghee",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "mangalorean",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS002",
+    "name": "Tawa Fish Fry",
+    "price": 555,
+    "description": "Mangalorean spice infused slice of King fish, shallow fried with a touch of spices",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "fish",
+      "fried",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS003",
+    "name": "Kallu Kada Mutton Roast",
+    "price": 450,
+    "description": "Slow-roasted mutton in coconut oil with blend of aromatic Kerala spices",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "mutton",
+      "roast",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS004",
+    "name": "Peri-Peri Chicken Tikka",
+    "price": 450,
+    "description": "Chicken marinated in a zesty peri-peri blend, sprinkled with tangy peri-peri dust",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "periperi",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS005",
+    "name": "Lasooni Chicken Tikka",
+    "price": 450,
+    "description": "Garlic marinated chicken grilled in the tandoor, served with mint chutney",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "tandoor",
+      "garlic",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS006",
+    "name": "Chicken Satay",
+    "price": 425,
+    "description": "Skewers of tender grilled chicken, perfectly charred with a side of peanut sauce",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "skewers",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS007",
+    "name": "XO Prawns",
+    "price": 555,
+    "description": "Succulent prawns tossed in our signature XO sauce with its umami-rich blend",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "prawns",
+      "seafood",
+      "umami",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS008",
+    "name": "Chicken Tikka",
+    "price": 425,
+    "description": "Boneless pieces of chicken, marinated in spiced yogurt, threaded on a metal skewer",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "tandoor",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS009",
+    "name": "Tandoori Chicken Half",
+    "price": 425,
+    "description": "Chicken marinated in yogurt and spices and roasted in a tandoor",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "tandoor",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS010",
+    "name": "Tandoori Chicken Full",
+    "price": 780,
+    "description": "Marinated chicken in rich spices, served with pickled vegetables and mint chutney",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "tandoor",
+      "full",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS011",
+    "name": "Akbari Murgh Kebab",
+    "price": 450,
+    "description": "Chicken braised in a special Goan cafreal masala along with the infusion of spices",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "kebab",
+      "goan",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS012",
+    "name": "Chicken Cafreal",
+    "price": 450,
+    "description": "Chicken braised in special Goan cafreal masala along with the infusion of spices",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "goan",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS013",
+    "name": "Mutton Kola Urundai",
+    "price": 490,
+    "description": "Savoury minced mutton orbs with Indian spices and aromatic herbs",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "mutton",
+      "kebab",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS014",
+    "name": "Chicken 65 Boneless",
+    "price": 365,
+    "description": "Spicy deep fried boneless chicken 65",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "fried",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "NS015",
+    "name": "Thai Pandan Leaf",
+    "price": 450,
+    "description": "Succulent chicken parcels infused with Thai herbs delicately encased in fragrant pandan leaves",
+    "tags": [
+      "non-vegetarian",
+      "starter",
+      "chicken",
+      "thai",
+      "non_vegetarian"
+    ],
+    "category": "starters"
+  },
+  {
+    "id": "VM001",
+    "name": "Poondu Kuzhambu",
+    "price": 295,
+    "description": "Garlic cloves simmered in spicy and tangy tamarind gravy enriched with aromatic herbs",
+    "tags": [
+      "vegetarian",
+      "main",
+      "south indian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM002",
+    "name": "Kai Kari Stew",
+    "price": 320,
+    "description": "Farm fresh vegetables simmered in fresh coconut extract and tempered with Malabar spice",
+    "tags": [
+      "vegetarian",
+      "main",
+      "stew",
+      "south indian",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM003",
+    "name": "Makkai aur Kumbh Kofta",
+    "price": 360,
+    "description": "Dumplings made with a mix of corn and mushrooms served with creamy cashew gravy",
+    "tags": [
+      "vegetarian",
+      "main",
+      "kofta",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM004",
+    "name": "Paneer Tikka Lababdar",
+    "price": 385,
+    "description": "Spicy paneer tikka cooked with trio peppers in a rich and creamy aromatic gravy",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM005",
+    "name": "Bindi Do-Pyaza",
+    "price": 320,
+    "description": "Spicy stir fried ladies finger and onions",
+    "tags": [
+      "vegetarian",
+      "main",
+      "bhindi",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM006",
+    "name": "Dal Tadka",
+    "price": 295,
+    "description": "Yellow lentils tempered with cumin and ghee",
+    "tags": [
+      "vegetarian",
+      "main",
+      "dal",
+      "comfort",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM007",
+    "name": "Dal Makhani",
+    "price": 320,
+    "description": "Slow-cooked black lentils in rich tomato creamy sauce, drizzled with melted butter",
+    "tags": [
+      "vegetarian",
+      "main",
+      "dal",
+      "rich",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM008",
+    "name": "Thai Green Curry Veg",
+    "price": 360,
+    "description": "Fresh vegetables simmered in a fragrant green curry sauce with vibrant flavours",
+    "tags": [
+      "vegetarian",
+      "main",
+      "thai",
+      "curry",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM009",
+    "name": "Thai Red Curry Veg",
+    "price": 360,
+    "description": "Fresh vegetables bathed in a luscious red curry sauce with aromatic spices",
+    "tags": [
+      "vegetarian",
+      "main",
+      "thai",
+      "curry",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM010",
+    "name": "Shanghai Chilli Veg Sauce",
+    "price": 320,
+    "description": "A mix of vegetables, stir-fried in a spicy Shanghai-style chilli sauce (served as semi-gravy)",
+    "tags": [
+      "vegetarian",
+      "main",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM011",
+    "name": "Shanghai Chilli Paneer Sauce",
+    "price": 425,
+    "description": "Paneer stir-fried in a spicy Shanghai-style chilli sauce (semi-gravy)",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM012",
+    "name": "Schezwan Wok Tossed Veg Sauce",
+    "price": 320,
+    "description": "A mix of vegetables stir-fried in Schezwan sauces and spices (semi-gravy)",
+    "tags": [
+      "vegetarian",
+      "main",
+      "schezwan",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM013",
+    "name": "Schezwan Wok Tossed Paneer Sauce",
+    "price": 425,
+    "description": "Paneer stir-fried in Schezwan sauces and spices (semi-gravy)",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "schezwan",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM014",
+    "name": "Langar Wali Dal",
+    "price": 295,
+    "description": "Slow-cooked green moong and black lentils with spices, finished with a generous dollop of ghee",
+    "tags": [
+      "vegetarian",
+      "main",
+      "dal",
+      "traditional",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM015",
+    "name": "Tawa Subji (Semi Gravy)",
+    "price": 320,
+    "description": "Assorted seasonal Indian vegetables sautéed on a hot griddle with a fragrant mix of spices",
+    "tags": [
+      "vegetarian",
+      "main",
+      "tawa",
+      "seasonal",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM016",
+    "name": "Paneer Kurchan",
+    "price": 385,
+    "description": "Punjab-style paneer and bell peppers stir-fried with a blend of cumin, coriander, turmeric",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "punjabi",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM017",
+    "name": "Saag Paneer",
+    "price": 385,
+    "description": "Blended spinach puree cooked with besan flour and mild spices, with paneer cubes",
+    "tags": [
+      "vegetarian",
+      "main",
+      "saag",
+      "paneer",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM018",
+    "name": "Karaikudi Kalan Curry",
+    "price": 335,
+    "description": "Traditional South Indian mushroom curry, slow-cooked in a blend of roasted spices",
+    "tags": [
+      "vegetarian",
+      "main",
+      "south indian",
+      "mushroom",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM019",
+    "name": "Mushroom Mapo Tofu",
+    "price": 335,
+    "description": "Tofu cubes cooked in spicy and aromatic sauce with hints of garlic and ginger",
+    "tags": [
+      "vegetarian",
+      "main",
+      "tofu",
+      "asian",
+      "spicy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM020",
+    "name": "Lachhhala Paneer",
+    "price": 385,
+    "description": "Paneer stuffed and rolled cooked in rich creamy tomato base",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "creamy",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "VM021",
+    "name": "Pesto Paneer Steak",
+    "price": 425,
+    "description": "Paneer slab in aromatic pesto sauce grilled and served with spaghetti aglio e olio",
+    "tags": [
+      "vegetarian",
+      "main",
+      "paneer",
+      "fusion",
+      "pesto",
+      "vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM001",
+    "name": "Kozhi Varutha Curry",
+    "price": 450,
+    "description": "Traditional South Indian chicken curry, slow-cooked in a blend of roasted spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "south indian",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM002",
+    "name": "Madurai Mutton Curry",
+    "price": 490,
+    "description": "Succulent mutton cooked in a spicy and flavorful gravy made with a blend of spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "mutton",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM003",
+    "name": "Meen Vattichathu",
+    "price": 490,
+    "description": "Tangy and spicy Kerala fish curry infused with kudampuli, aromatic spices and fresh herbs",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "fish",
+      "kerala",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM004",
+    "name": "Meen Manga Kuzhambu",
+    "price": 490,
+    "description": "Fish in a tamarind-based tangy raw mango & spicy south Indian gravy",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "fish",
+      "south indian",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM005",
+    "name": "Yera Manga Kuzhambu",
+    "price": 490,
+    "description": "Prawns in a tamarind-based tangy raw mango & spicy south Indian gravy",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "prawns",
+      "south indian",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM006",
+    "name": "Kadai Murgh Masala",
+    "price": 425,
+    "description": "Chicken chunks cooked to perfection in a traditional kadai (Indian wok) with a rich masala",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "kadai",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM007",
+    "name": "Afghani Chicken",
+    "price": 450,
+    "description": "A regal Indian dish with tender chicken cooked in a creamy and aromatic sauce",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "creamy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM008",
+    "name": "Nalli Nihari",
+    "price": 490,
+    "description": "A slow-cooked and flavorful North Indian dish, featuring tender lamb shanks in a rich gravy",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "nalli",
+      "slow-cooked",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM009",
+    "name": "Lakkans Butter Chicken",
+    "price": 425,
+    "description": "Tender chicken pieces in a creamy and mildly spiced cashew tomato-based gravy",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "butter chicken",
+      "creamy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM010",
+    "name": "Shanghai Chilli Chicken",
+    "price": 425,
+    "description": "Chicken stir-fried in a spicy Shanghai-style chilli sauce",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "asian",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM011",
+    "name": "Shanghai Chilli Prawn",
+    "price": 450,
+    "description": "Prawns stir-fried in a spicy Shanghai-style chilli sauce",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "prawns",
+      "asian",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM012",
+    "name": "Schezwan Wok Tossed Chicken",
+    "price": 425,
+    "description": "Chicken stir-fried in Schezwan sauces and spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "schezwan",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM013",
+    "name": "Schezwan Wok Tossed Prawn",
+    "price": 450,
+    "description": "Prawns stir-fried in Schezwan sauces and spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "prawns",
+      "schezwan",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM014",
+    "name": "Thai Chicken Green Curry",
+    "price": 450,
+    "description": "Chicken simmered in a fragrant green curry sauce with vibrant flavours",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "thai",
+      "curry",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM015",
+    "name": "Thai Chicken Red Curry",
+    "price": 450,
+    "description": "Chicken bathed in a luscious red curry sauce with aromatic herbs and spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "thai",
+      "curry",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM016",
+    "name": "Murgh Bemisaal",
+    "price": 450,
+    "description": "Chicken curry combining aromatic spices like cardamom, cloves, and cinnamon with a creamy base",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "aromatic",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM017",
+    "name": "Gosht Roganjosh",
+    "price": 490,
+    "description": "Classic Kashmiri mutton dish in a rich gravy infused with aromatic spices",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "mutton",
+      "kashmiri",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM018",
+    "name": "Hot Basil Chicken Krapow",
+    "price": 450,
+    "description": "Idiyappam served with coconut milk and spicy basil chicken (Thai-influenced)",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "thai",
+      "spicy",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM019",
+    "name": "Chicken Peridu",
+    "price": 450,
+    "description": "Fried eggs on mildly spiced chicken kheema served with buttered pao and green chilli",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "kheema",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM020",
+    "name": "Mediterranean BBQ Chicken",
+    "price": 490,
+    "description": "Mediterranean spiced grilled chicken, saffron rice, pickled vegetables, toum, hummus and tahini sauce",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "mediterranean",
+      "grilled",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM021",
+    "name": "Ras El Hanout with Saffron Rice",
+    "price": 555,
+    "description": "Moroccan spiced juicy mutton kebabs served with saffron rice and mildly spiced honey glaze",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "mutton",
+      "moroccan",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "NM022",
+    "name": "Grilled Peri Peri Chicken Steak",
+    "price": 490,
+    "description": "Succulent grilled chicken breast marinated in peri peri spice, served with butter sauteed vegetables",
+    "tags": [
+      "non-vegetarian",
+      "main",
+      "chicken",
+      "periperi",
+      "grill",
+      "non_vegetarian"
+    ],
+    "category": "main_course"
+  },
+  {
+    "id": "B001",
+    "name": "Idiyappam (3 pcs)",
+    "price": 165,
+    "description": "String hoppers served typically with curry",
+    "tags": [
+      "bread",
+      "south indian"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B002",
+    "name": "Kal Dosa (2 pcs)",
+    "price": 165,
+    "description": "Served with chutney & sambar",
+    "tags": [
+      "bread",
+      "dosa",
+      "south indian"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B003",
+    "name": "Kerala Nei Parotta",
+    "price": 100,
+    "description": "Flaky layered parotta with ghee",
+    "tags": [
+      "bread",
+      "kerala",
+      "parotta"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B004",
+    "name": "Onion Kulcha",
+    "price": 85,
+    "description": "Soft kulcha stuffed with onion",
+    "tags": [
+      "bread",
+      "north indian",
+      "kulcha"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B005",
+    "name": "Amritsari Kulcha",
+    "price": 175,
+    "description": "Stuffed kulcha made in Amritsari style",
+    "tags": [
+      "bread",
+      "north indian",
+      "kulcha"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B006",
+    "name": "Garlic Naan",
+    "price": 85,
+    "description": "Naan topped with garlic butter",
+    "tags": [
+      "bread",
+      "naan",
+      "garlic"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B007",
+    "name": "Butter Naan",
+    "price": 85,
+    "description": "Classic naan brushed with butter",
+    "tags": [
+      "bread",
+      "naan",
+      "butter"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B008",
+    "name": "Plain Naan",
+    "price": 85,
+    "description": "Soft tandoori naan",
+    "tags": [
+      "bread",
+      "naan"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B009",
+    "name": "Tandoori Plain Roti",
+    "price": 85,
+    "description": "Whole wheat roti made in tandoor",
+    "tags": [
+      "bread",
+      "roti",
+      "tandoor"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B010",
+    "name": "Butter Roti",
+    "price": 85,
+    "description": "Roti served with butter",
+    "tags": [
+      "bread",
+      "roti",
+      "butter"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B011",
+    "name": "Methi Tawa Paratha",
+    "price": 85,
+    "description": "Fenugreek flavored paratha cooked on tawa",
+    "tags": [
+      "bread",
+      "paratha",
+      "methi"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B012",
+    "name": "Pudina Tawa Paratha",
+    "price": 85,
+    "description": "Mint flavored paratha cooked on tawa",
+    "tags": [
+      "bread",
+      "paratha",
+      "pudina"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B013",
+    "name": "Tawa Paratha",
+    "price": 85,
+    "description": "Classic paratha cooked on tawa",
+    "tags": [
+      "bread",
+      "paratha"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B014",
+    "name": "Butter Chicken Kulcha",
+    "price": 195,
+    "description": "Kulcha stuffed with butter chicken filling",
+    "tags": [
+      "bread",
+      "kulcha",
+      "butter chicken",
+      "stuffed"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B015",
+    "name": "Butter Paneer Kulcha",
+    "price": 195,
+    "description": "Kulcha stuffed with butter paneer filling",
+    "tags": [
+      "bread",
+      "kulcha",
+      "paneer",
+      "stuffed"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B016",
+    "name": "Cheese Naan",
+    "price": 120,
+    "description": "Naan stuffed with melted cheese",
+    "tags": [
+      "bread",
+      "naan",
+      "cheese"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "B017",
+    "name": "Assorted Bread Basket",
+    "price": 325,
+    "description": "Selection of assorted breads",
+    "tags": [
+      "bread",
+      "basket",
+      "assorted"
+    ],
+    "category": "indian_breads"
+  },
+  {
+    "id": "R001",
+    "name": "Steamed Ponni Rice",
+    "price": 100,
+    "description": "Plain steamed Ponni rice",
+    "tags": [
+      "rice",
+      "steamed"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R002",
+    "name": "Basmati Steamed Rice",
+    "price": 165,
+    "description": "Plain steamed basmati rice",
+    "tags": [
+      "rice",
+      "basmati",
+      "steamed"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R003",
+    "name": "Seeraga Samba Nei Soru (Ghee Rice)",
+    "price": 190,
+    "description": "Seeraga samba rice cooked with ghee, aromatic and fragrant",
+    "tags": [
+      "rice",
+      "ghee",
+      "south indian"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R004",
+    "name": "Jasmine Sticky Rice",
+    "price": 255,
+    "description": "Fragrant sticky jasmine rice",
+    "tags": [
+      "rice",
+      "jasmine",
+      "sticky"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R005",
+    "name": "Jeera Pulao",
+    "price": 230,
+    "description": "Basmati rice cooked with cumin seeds",
+    "tags": [
+      "rice",
+      "pulao",
+      "jeera"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R006",
+    "name": "Methi Pulao",
+    "price": 230,
+    "description": "Aromatic pulao with fenugreek leaves",
+    "tags": [
+      "rice",
+      "pulao",
+      "methi"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R007",
+    "name": "Peas Pulao",
+    "price": 230,
+    "description": "Pulao cooked with green peas",
+    "tags": [
+      "rice",
+      "pulao",
+      "peas"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R008",
+    "name": "Gongura Rice",
+    "price": 255,
+    "description": "Tangy gongura flavored rice",
+    "tags": [
+      "rice",
+      "regional",
+      "tangy"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "R009",
+    "name": "Avakkai Rice",
+    "price": 255,
+    "description": "Rice flavored with avakkai (mango pickle) essence",
+    "tags": [
+      "rice",
+      "regional",
+      "tangy"
+    ],
+    "category": "indian_rice"
+  },
+  {
+    "id": "A001",
+    "name": "Burnt Garlic Veg Fried Rice",
+    "price": 260,
+    "description": "Fried rice with burnt garlic and mixed vegetables",
+    "tags": [
+      "asian",
+      "rice",
+      "veg"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A002",
+    "name": "Schezwan Wok Fried Rice Veg",
+    "price": 260,
+    "description": "Veg fried rice tossed in Schezwan sauce",
+    "tags": [
+      "asian",
+      "rice",
+      "veg",
+      "schezwan"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A003",
+    "name": "Street Veg Hakka Noodles",
+    "price": 275,
+    "description": "Classic street style veg hakka noodles",
+    "tags": [
+      "asian",
+      "noodles",
+      "veg",
+      "hakka"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A004",
+    "name": "Veg Char Kway Teow",
+    "price": 295,
+    "description": "Wok-fried flat rice noodles with vegetables",
+    "tags": [
+      "asian",
+      "noodles",
+      "veg",
+      "char kway teow"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A005",
+    "name": "Burnt Garlic Egg Fried Rice",
+    "price": 290,
+    "description": "Fried rice with egg and burnt garlic",
+    "tags": [
+      "asian",
+      "rice",
+      "egg"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A006",
+    "name": "Burnt Garlic Chicken Fried Rice",
+    "price": 315,
+    "description": "Fried rice with chicken and burnt garlic",
+    "tags": [
+      "asian",
+      "rice",
+      "chicken"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A007",
+    "name": "Burnt Garlic Seafood Fried Rice",
+    "price": 340,
+    "description": "Fried rice with seafood and burnt garlic",
+    "tags": [
+      "asian",
+      "rice",
+      "seafood"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A008",
+    "name": "Schezwan Wok Egg Fried Rice",
+    "price": 290,
+    "description": "Egg fried rice in Schezwan style",
+    "tags": [
+      "asian",
+      "rice",
+      "egg",
+      "schezwan"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A009",
+    "name": "Schezwan Wok Chicken Fried Rice",
+    "price": 315,
+    "description": "Chicken fried rice in Schezwan style",
+    "tags": [
+      "asian",
+      "rice",
+      "chicken",
+      "schezwan"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A010",
+    "name": "Schezwan Wok Seafood Fried Rice",
+    "price": 340,
+    "description": "Seafood fried rice in Schezwan style",
+    "tags": [
+      "asian",
+      "rice",
+      "seafood",
+      "schezwan"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A011",
+    "name": "Street Hakka Noodles Egg",
+    "price": 300,
+    "description": "Street style hakka noodles with egg",
+    "tags": [
+      "asian",
+      "noodles",
+      "egg",
+      "hakka"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A012",
+    "name": "Street Hakka Noodles Chicken",
+    "price": 325,
+    "description": "Street style hakka noodles with chicken",
+    "tags": [
+      "asian",
+      "noodles",
+      "chicken",
+      "hakka"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A013",
+    "name": "Street Hakka Noodles Seafood",
+    "price": 355,
+    "description": "Street style hakka noodles with seafood",
+    "tags": [
+      "asian",
+      "noodles",
+      "seafood",
+      "hakka"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A014",
+    "name": "Char Kway Teow Egg",
+    "price": 320,
+    "description": "Char kway teow with egg",
+    "tags": [
+      "asian",
+      "noodles",
+      "egg",
+      "char kway teow"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A015",
+    "name": "Char Kway Teow Chicken",
+    "price": 335,
+    "description": "Char kway teow with chicken",
+    "tags": [
+      "asian",
+      "noodles",
+      "chicken",
+      "char kway teow"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A016",
+    "name": "Char Kway Teow Seafood",
+    "price": 360,
+    "description": "Char kway teow with seafood",
+    "tags": [
+      "asian",
+      "noodles",
+      "seafood",
+      "char kway teow"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A017",
+    "name": "Veg Nasi Goreng",
+    "price": 490,
+    "description": "Flavourful stir fried rice with mixed vegetables, paneer satay, peanut sauce, cucumber, tomato",
+    "tags": [
+      "asian",
+      "rice",
+      "nasi goreng",
+      "veg"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A018",
+    "name": "Nasi Goreng Chicken",
+    "price": 515,
+    "description": "Wok tossed spicy rice with a bulls eye (egg) and side of prawn (or chicken)",
+    "tags": [
+      "asian",
+      "rice",
+      "nasi goreng",
+      "chicken"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "A019",
+    "name": "Chicken Katsu Ramen",
+    "price": 515,
+    "description": "Crumb fried chicken and noodles in hot and clear flavourful broth",
+    "tags": [
+      "asian",
+      "noodles",
+      "chicken",
+      "ramen"
+    ],
+    "category": "asian_rice_and_noodles"
+  },
+  {
+    "id": "P001",
+    "name": "Spaghetti Alfredo",
+    "price": 320,
+    "description": "Classic creamy alfredo spaghetti",
+    "tags": [
+      "pasta",
+      "italian",
+      "creamy"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P002",
+    "name": "Penne Alfredo",
+    "price": 320,
+    "description": "Creamy penne alfredo",
+    "tags": [
+      "pasta",
+      "italian",
+      "creamy"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P003",
+    "name": "Spaghetti Pesto Cream",
+    "price": 320,
+    "description": "Spaghetti in a creamy pesto sauce",
+    "tags": [
+      "pasta",
+      "pesto",
+      "creamy"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P004",
+    "name": "Spaghetti Peperoncino",
+    "price": 320,
+    "description": "Spaghetti tossed with garlic, chilli and olive oil",
+    "tags": [
+      "pasta",
+      "spicy",
+      "olive oil"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P005",
+    "name": "Penne Peperoncino",
+    "price": 320,
+    "description": "Penne tossed with garlic, chilli and olive oil",
+    "tags": [
+      "pasta",
+      "spicy",
+      "olive oil"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P006",
+    "name": "Spaghetti Arrabbiata",
+    "price": 320,
+    "description": "Spaghetti in a spicy tomato garlic sauce",
+    "tags": [
+      "pasta",
+      "spicy",
+      "tomato"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "P007",
+    "name": "Penne Arrabbiata",
+    "price": 320,
+    "description": "Penne in a spicy tomato garlic sauce",
+    "tags": [
+      "pasta",
+      "spicy",
+      "tomato"
+    ],
+    "category": "pasta"
+  },
+  {
+    "id": "D001",
+    "name": "Oreo Basque Cheesecake",
+    "price": 385,
+    "description": "Creamy basque-style cheesecake with Oreo",
+    "tags": [
+      "dessert",
+      "cheesecake",
+      "oreo"
+    ],
+    "category": "desserts"
+  },
+  {
+    "id": "D002",
+    "name": "Brownie",
+    "price": 145,
+    "description": "Rich chocolate brownie",
+    "tags": [
+      "dessert",
+      "chocolate",
+      "baked"
+    ],
+    "category": "desserts"
+  },
+  {
+    "id": "D003",
+    "name": "Gulab Jamun",
+    "price": 120,
+    "description": "Traditional syrupy Indian sweet",
+    "tags": [
+      "dessert",
+      "indian",
+      "sweet"
+    ],
+    "category": "desserts"
+  },
+  {
+    "id": "D004",
+    "name": "Tiramisu",
+    "price": 425,
+    "description": "Classic Italian tiramisu",
+    "tags": [
+      "dessert",
+      "italian",
+      "coffee"
+    ],
+    "category": "desserts"
+  }
+]
