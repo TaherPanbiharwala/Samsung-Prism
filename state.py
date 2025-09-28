@@ -1,7 +1,8 @@
 # state.py
-from typing import List, Dict, Any, Literal, TypedDict, cast
+from typing_extensions import List, Dict, Any, Literal, TypedDict, cast
 from pydantic import BaseModel, Field
 from pydantic.type_adapter import TypeAdapter
+
 
 class MessageModel(BaseModel):
     # 🔹 Added "system" so persona/context messages are valid

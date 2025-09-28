@@ -1,0 +1,76 @@
+[
+  {
+    "session_id": "cli",
+    "ts": 1759097443,
+    "items": [
+      {
+        "id": "VS006",
+        "name": "Schezwan Wok Tossed Veg Dry",
+        "price": 320.0,
+        "qty": 1
+      },
+      {
+        "id": "VS008",
+        "name": "Paneer 65",
+        "price": 360.0,
+        "qty": 1
+      }
+    ],
+    "total": 680.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759097467,
+    "items": [
+      {
+        "id": "D001",
+        "name": "Oreo Basque Cheesecake",
+        "price": 385.0,
+        "qty": 1
+      }
+    ],
+    "total": 385.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759099904,
+    "items": [
+      {
+        "id": "VS009",
+        "name": "Mushroom 65",
+        "price": 335.0,
+        "qty": 1
+      },
+      {
+        "id": "NS014",
+        "name": "Chicken 65 Boneless",
+        "price": 365.0,
+        "qty": 1
+      }
+    ],
+    "total": 700.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759100440,
+    "items": [
+      {
+        "id": "VS009",
+        "name": "Mushroom 65",
+        "price": 335.0,
+        "qty": 1
+      },
+      {
+        "id": "NS014",
+        "name": "Chicken 65 Boneless",
+        "price": 365.0,
+        "qty": 1
+      }
+    ],
+    "total": 700.0,
+    "status": "PLACED"
+  }
+]
