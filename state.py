@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 from pydantic.type_adapter import TypeAdapter
 
 class MessageModel(BaseModel):
-    role: Literal["user", "assistant"]
+    # 🔹 Added "system" so persona/context messages are valid
+    role: Literal["system", "user", "assistant"]
     content: str = Field(min_length=1)
 
 class ChatStateModel(BaseModel):
@@ -13,7 +14,8 @@ class ChatStateModel(BaseModel):
     metadata: Dict[str, Any] = {}
 
 class MessageTD(TypedDict):
-    role: Literal["user","assistant"]
+    # 🔹 Allow "system" in TypedDict as well
+    role: Literal["system", "user", "assistant"]
     content: str
 
 class ChatStateTD(TypedDict, total=False):

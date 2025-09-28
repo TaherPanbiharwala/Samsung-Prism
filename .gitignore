@@ -1,2 +1,16 @@
 redis-data
 .env
+test/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.DS_Store
+
+# Local databases
+*.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
