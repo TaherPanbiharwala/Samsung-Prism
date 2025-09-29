@@ -1,6 +1,6 @@
 # ordering.py
 from typing import List, Dict, Any, Optional
-import os, re, json, time, traceback
+import os, re, json, time, traceback,string
 
 from pydantic import BaseModel, Field
 
@@ -33,6 +33,148 @@ class ConfirmSchema(BaseModel):
     decision: str  # "yes", "no", or "unclear"
 
 # ---------- Helpers ----------
+# --- add these helpers near your other helpers ---
+def _fallback_extract_items(user_text: str, menu: List[Dict[str, Any]]) -> list[dict]:
+    """
+    Very simple matcher:
+    - Finds quantities like '2 garlic naan' or standalone dish names
+    - Matches against your menu names (case-insensitive, token overlap)
+    - Defaults action='add'
+    """
+    text = user_text.lower()
+    names = [m["name"] for m in menu]
+    items = []
+
+    # 1) qty + name (e.g., '2 garlic naan', '1 butter chicken')
+    qty_name = re.findall(r"(\d+)\s+([a-z][a-z0-9\s\-']+)", text)
+    for q, raw in qty_name:
+        q = int(q)
+        raw = raw.strip()
+        best = None; best_overlap = 0
+        raw_tokens = set(re.findall(r"[a-z0-9]+", raw))
+        for nm in names:
+            nm_l = nm.lower()
+            nm_tokens = set(re.findall(r"[a-z0-9]+", nm_l))
+            ov = len(raw_tokens & nm_tokens)
+            if ov > best_overlap:
+                best_overlap = ov; best = nm
+        if best and best_overlap > 0:
+            items.append({"name": best, "qty": q, "action": "add"})
+
+    # 2) bare dish names (no qty) → qty=1
+    for nm in names:
+        if nm.lower() in text and not any(nm == i["name"] for i in items):
+            items.append({"name": nm, "qty": 1, "action": "add"})
+
+    return items
+
+
+def _get_menu_pool(md: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Use current candidates if present; otherwise fall back to the full menu.
+    Works even if you don't have a dedicated 'load_full_menu' helper.
+    """
+    cands = md.get("candidates") or []
+    if cands:
+        return cands
+    try:
+        # try an explicit full-menu call if you have it
+        if hasattr(rag, "load_full_menu"):
+            return rag.load_full_menu()
+    except Exception:
+        pass
+    try:
+        # broad search fallback (empty query / popular)
+        return rag.search_menu("popular", top_k=500)
+    except Exception:
+        return []
+
+_WORD = r"[a-zA-Z][a-zA-Z\-\(\)\s']*"  # item name-ish tokens
+
+def _regex_parse_updates(text: str) -> List[Dict[str, Any]]:
+    """
+    Very forgiving parser: extracts a list of {name, qty, action} from free text.
+    Recognizes verbs: add / remove / delete and bare "1 butter chicken".
+    """
+    t = (text or "").lower()
+
+    # normalize separators
+    parts = re.split(r"\s*(?:,| and | & | plus | with )\s*", t)
+    items: List[Dict[str, Any]] = []
+
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+
+        action = "add"
+        if re.search(r"\b(remove|delete|rm)\b", p):
+            action = "remove"
+
+        # e.g., "add 2 garlic naan", "2 garlic naan", "garlic naan", "remove butter chicken"
+        m = re.search(r"(?:add|give me|get me|order|take|i'?ll have|i will have|i want|remove|delete)?\s*(\d+)?\s*(" + _WORD + ")", p)
+        if not m:
+            continue
+
+        qty_s, name = m.groups()
+        qty = int(qty_s) if qty_s and qty_s.isdigit() else 1
+        name = name.strip()
+        # filter out ultra-generic fragments
+        if len(name) < 3:
+            continue
+
+        items.append({"name": name, "qty": qty, "action": action})
+
+    # merge duplicates within this utterance
+    merged: Dict[tuple, Dict[str, Any]] = {}
+    for it in items:
+        key = (it["name"], it["action"])
+        if key in merged:
+            merged[key]["qty"] += it["qty"]
+        else:
+            merged[key] = it
+    return list(merged.values())
+
+def _norm_tokens(s: str) -> List[str]:
+    if not s:
+        return []
+    s = s.lower()
+    table = str.maketrans("", "", string.punctuation)
+    s = s.translate(table)
+    toks = [t for t in s.split() if t not in {"and","with","of","the","a","an"}]
+    # naive singularize
+    out = []
+    for t in toks:
+        if len(t) > 3 and t.endswith("es"):
+            out.append(t[:-2])
+        elif len(t) > 2 and t.endswith("s"):
+            out.append(t[:-1])
+        else:
+            out.append(t)
+    return out
+
+def _score_match(qname: str, cand_name: str) -> float:
+    qt = set(_norm_tokens(qname))
+    ct = set(_norm_tokens(cand_name))
+    if not qt or not ct:
+        return 0.0
+    inter = qt & ct
+    score = len(inter) / max(1, len(qt))
+    # small bonus for substring containment
+    if qname.lower() in cand_name.lower() or cand_name.lower() in qname.lower():
+        score += 0.25
+    return score
+
+def _best_menu_match(name: str, pool: List[Dict[str,Any]]) -> Optional[Dict[str,Any]]:
+    best = None
+    best_score = 0.0
+    for c in pool or []:
+        s = _score_match(name, c.get("name",""))
+        if s > best_score:
+            best_score = s
+            best = c
+    return best if best_score >= 0.45 else None  # threshold tuned a bit lower
+
 def _ensure_lists(state: Dict[str, Any]):
     md = state.setdefault("metadata", {})
     md.setdefault("cart", [])
@@ -189,7 +331,6 @@ def menu_lookup_node(state: Dict[str, Any]) -> Dict[str, Any]:
     state["metadata"]["_awaiting_worker"] = False
     return state
 
-
 ORDER_VERBS = (
     "add", "get me", "give me", "i'll have", "i will have",
     "i want", "we'll have", "we will have", "order", "take"
@@ -199,86 +340,172 @@ ORDER_VERBS = (
 def take_order_node(state: Dict[str, Any]) -> Dict[str, Any]:
     print("[NODE] take_order")
     _ensure_lists(state)
-    md = state["metadata"]; msgs = state["messages"]
+    md = state["metadata"]
+    msgs = state["messages"]
     user_raw = msgs[-1]["content"]
 
+    # ---- Candidate pool ----
     cands = md.get("candidates", [])
+    if not cands:
+        try:
+            cands = rag.search_menu("popular", top_k=145)
+        except Exception:
+            cands = []
+    cand_names = [c["name"] for c in (cands or [])]
 
-    # --- Step 1: Ask LLM to parse structured order ---
+    # ---- Ask LLM for structured cart updates ----
+    schema_hint = '{"items":[{"name":"Butter Chicken","qty":1,"action":"add"}]}'
+    system = f"""
+You are a cart update extractor for a restaurant ordering agent.
+Return ONLY JSON (no code fences, no prose).
+Schema: {schema_hint}
+Rules:
+- Each item: name (string), qty (int), action ("add"|"remove").
+- If qty missing → 1, if action missing → "add".
+- Prefer dish names close to these candidates: {cand_names}.
+- If nothing found, return {{"items":[]}}.
+"""
+
+    parsed = {}
     try:
-        parsed = generate_json(
-            system=f"""
-            You are a strict parser. Extract structured order items (dish name + qty) from user text.
-            Consider these valid menu candidates: {[c['name'] for c in cands]}.
-            Only output JSON matching schema.
-            Schema: {{"items":[{{"name": "DishName", "qty": 2}}]}}
-            """,
-            user=user_raw,
-            schema_hint='{"items":[{"name":"Chicken Tikka","qty":2}]}',
-            max_tokens=80,
-        )
-
-        # Ensure we only take JSON block
-        if not isinstance(parsed, dict):
-            print("[Order Parse Warning] LLM did not return dict:", parsed)
-            parsed = {"items": []}
-        items = parsed.get("items", [])
-        if not isinstance(items, list):
-            items = []
+        parsed = generate_json(system=system, user=user_raw, schema_hint='{"items":[]}', max_tokens=128)
     except Exception as e:
         print("[Order Parse Error]", e)
-        items = []
+    print("[DEBUG parsed LLM JSON]", parsed)
 
-    # --- Step 2: Match items to menu ---
-    added = []
+    items = parsed.get("items") or []
+
+    # ---- Quick fallback parser for 'remove ...' utterances ----
+    # Handles: "remove butter chicken", "delete 1 naan", "rm 2 garlic naans"
+    if not items:
+        import re
+        rm_items = []
+        for m in re.finditer(r"\b(remove|delete|rm)\s+(?:(\d+)\s+)?([a-zA-Z][\w\s\-&]+)", user_raw, re.I):
+            qty_str = m.group(2)
+            name_str = m.group(3).strip()
+            # If no qty given for remove → remove ALL of that item
+            rm_items.append({"name": name_str, "qty": int(qty_str) if qty_str else None, "action": "remove"})
+        if rm_items:
+            items = rm_items
+
+    # —— Fallback when still nothing —— #
+    if not items:
+        menu_pool = (cands or []) or rag.search_menu("popular", top_k=145)
+        items = _fallback_extract_items(user_raw, menu_pool)
+
+    added, removed, changed = [], [], []
+
+    # ---- Fuzzy matching helpers ----
+    import string
+    def _norm_tokens(s: str):
+        if not s: return []
+        s = s.lower()
+        table = str.maketrans("", "", string.punctuation)
+        s = s.translate(table)
+        toks = [t for t in s.split() if t not in {"and","with","of","the","a","an"}]
+        out = []
+        for t in toks:
+            if len(t) > 3 and t.endswith("es"):
+                out.append(t[:-2])
+            elif len(t) > 2 and t.endswith("s"):
+                out.append(t[:-1])
+            else:
+                out.append(t)
+        return out
+
+    def _score_match(qname: str, cand_name: str) -> float:
+        qt, ct = set(_norm_tokens(qname)), set(_norm_tokens(cand_name))
+        if not qt or not ct:
+            return 0.0
+        inter = qt & ct
+        score = len(inter) / max(1, len(qt))
+        if qname.lower() in cand_name.lower() or cand_name.lower() in qname.lower():
+            score += 0.25
+        return score
+
+    def _best_menu_match(name: str, pool: List[Dict[str,Any]]):
+        best, best_score = None, 0.0
+        for c in pool or []:
+            s = _score_match(name, c.get("name",""))
+            if s > best_score:
+                best_score, best = s, c
+        return best if best_score >= 0.45 else None
+
+    # ---- Apply items ----
     for it in items:
         try:
-            name = it.get("name")
-            qty = int(it.get("qty", 1))
+            name = str(it.get("name","")).strip()
             if not name:
                 continue
+            action = (it.get("action","add") or "add").lower()
+            qty_val = it.get("qty", 1)
+            qty = int(qty_val) if isinstance(qty_val, (int, str)) and str(qty_val).isdigit() else None
 
-            # Prefer candidates first
-            menu_item = _best_match_from_candidates(name, cands)
+            # Try candidates → global → targeted search
+            menu_item = _best_menu_match(name, cands) or rag.find_by_name(name)
             if not menu_item:
-                menu_item = rag.find_by_name(name)
+                try:
+                    hits = rag.search_menu(name, top_k=10)
+                except Exception:
+                    hits = []
+                menu_item = _best_menu_match(name, hits)
 
-            if menu_item:
-                # merge or add new
-                existing = next((c for c in md["cart"] if c["id"] == menu_item["id"]), None)
+            if not menu_item:
+                print("[WARN] no menu match for", name)
+                continue
+
+            existing = next((x for x in md["cart"] if x["name"].lower() == menu_item["name"].lower()), None)
+
+            if action == "add":
+                eff_qty = qty if qty is not None else 1
                 if existing:
-                    existing["qty"] += qty
+                    existing["qty"] += eff_qty
+                    changed.append(f"+{eff_qty} {menu_item['name']}")
                 else:
-                    md["cart"].append({
-                        "id": menu_item["id"],
-                        "name": menu_item["name"],
-                        "price": menu_item["price"],
-                        "qty": qty,
-                    })
-                added.append(f"{qty} x {menu_item['name']}")
-        except Exception as e:
-            print("[Add Item Error]", e, it)
+                    menu_copy = dict(menu_item)
+                    menu_copy["qty"] = eff_qty
+                    md["cart"].append(menu_copy)
+                    added.append(f"{eff_qty} x {menu_item['name']}")
 
-    # --- Step 3: Build response ---
-    if added:
-        md["stage"] = "confirm"
+            elif action == "remove":
+                if not existing:
+                    # nothing to remove
+                    continue
+                if qty is None:
+                    # no qty provided → remove the whole line
+                    md["cart"].remove(existing)
+                    removed.append(menu_item["name"])
+                else:
+                    existing["qty"] -= qty
+                    if existing["qty"] <= 0:
+                        md["cart"].remove(existing)
+                        removed.append(menu_item["name"])
+                    else:
+                        changed.append(f"-{qty} {menu_item['name']}")
+        except Exception as e:
+            print("[Order Apply Error]", e)
+            continue
+
+    # ---- Build reply ----
+    if added or removed or changed:
+        md["stage"] = "confirm" if md["cart"] else "take"
+        summary = _summarize_cart(md["cart"]) if md["cart"] else "Your cart is now empty."
+        parts = []
+        if added:   parts.append("Added: " + ", ".join(added))
+        if changed: parts.append("Updated: " + ", ".join(changed))
+        if removed: parts.append("Removed: " + ", ".join(removed))
+        msg = ";\n".join(parts) + f".\n{summary}"
+        if md["cart"]:
+            msg += "\nShall I place the order? (yes/no)"
+        msgs.append({"role": "assistant", "content": msg})
+    else:
         msgs.append({
             "role": "assistant",
-            "content": f"Added: {', '.join(added)}.\n{_summarize_cart(md['cart'])}\nShall I place the order? (yes/no)"
+            "content": "I didn’t catch any updates. Try 'add 2 Garlic Naan and 1 Butter Chicken' or 'remove Butter Chicken'."
         })
-        state["metadata"]["_awaiting_worker"] = False
-        return state
 
-    # fallback
-    msgs.append({
-        "role": "assistant",
-        "content": "I didn’t catch any items. You can say '2 Paneer 65 and 1 Dal Tadka'."
-    })
     state["metadata"]["_awaiting_worker"] = False
     return state
-
-
-
 
 @validate_node(name="ConfirmOrder", tags=["ordering","confirm"], input_model=OrderInput, output_model=OrderOutput)
 def confirm_order_node(state: Dict[str, Any]) -> Dict[str, Any]:

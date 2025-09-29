@@ -173,3 +173,7 @@ def debug_status():
         print("[RAG] sample metadatas:", sample.get("metadatas"))
     except Exception as e:
         print("[RAG] debug_status error:", repr(e))
+
+def load_full_menu() -> List[Dict[str, Any]]:
+    # if you already keep menu cached for search_menu, just return the list here
+    return _ALL_MENU_ITEMS[:]  # however you store them
