@@ -4,6 +4,7 @@ import os, re, json, time, traceback,string
 
 from pydantic import BaseModel, Field
 
+from langgraph.graph import END
 from utils.validation import validate_node
 from utils import rag
 from utils.context import format_context_menu
@@ -12,7 +13,7 @@ from utils.nlu import classify  # (kept for traces if you want)
 from utils.llm import generate_waiter , generate_json
 from utils.config import SYSTEM_PROMPT, USE_WAITER_LLM
 from utils.pos import send_order_to_kitchen
-
+from utils.llm import generate_waiter as llm_chat
 
 # ---------- Schemas ----------
 class OrderInput(BaseModel):
@@ -34,6 +35,27 @@ class ConfirmSchema(BaseModel):
 
 # ---------- Helpers ----------
 # --- add these helpers near your other helpers ---
+def om_router(state):
+    md = state.get("metadata", {}) or {}
+
+    # ✅ stop the subgraph if a worker already replied this turn
+    if md.get("_awaiting_worker") is False:
+        return END
+
+    intent = (md.get("last_intent") or "").lower()
+
+    if intent in {"ordering.lookup", "ordering.more"}:
+        return "menu_lookup"
+    if intent == "ordering.take":
+        return "take_order"
+    if intent.startswith("confirm."):
+        return "confirm_order"
+    if intent == "chitchat":
+        return "chitchat"
+
+    # not an ordering intent → leave the subgraph
+    return END
+
 def _fallback_extract_items(user_text: str, menu: List[Dict[str, Any]]) -> list[dict]:
     """
     Very simple matcher:
@@ -279,6 +301,45 @@ def llm_decide_yes_no(user_text: str) -> str:
 
 
 # ---------- Nodes ----------
+@validate_node(name="Chitchat", tags=["chitchat"])
+def chitchat_node(state: Dict[str, Any]) -> Dict[str, Any]:
+    print(f"[NODE ENTER] chitchat: stage={state.get('metadata',{}).get('stage')}, "
+          f"intent={state.get('metadata',{}).get('last_intent')}, "
+          f"_awaiting={state.get('metadata',{}).get('_awaiting_worker')}")
+    msgs = state.get("messages", [])
+    md = state.setdefault("metadata", {})
+    user = msgs[-1]["content"] if msgs else ""
+
+    reply = None
+    if USE_WAITER_LLM:
+        try:
+            reply = llm_chat(
+                system="You are a friendly restaurant waiter. Keep replies brief and polite.",
+                context_menu="",
+                user=user,
+                max_tokens=60
+            )
+        except Exception:
+            traceback.print_exc()
+            reply = None
+
+    if not reply or not isinstance(reply, str) or not reply.strip():
+        reply = "Hi there! I’m your AI waiter. Would you like starters, mains, beverages or desserts?"
+
+    msgs.append({"role": "assistant", "content": reply})
+
+    # ✅ mark done for this turn & clear routing so router won't loop
+    md["_awaiting_worker"] = False
+    md["route"] = None
+    md["stage"] = None
+    md["last_intent"] = "__idle__"
+
+    state["messages"] = msgs
+    print(f"[NODE EXIT]  chitchat: stage={state.get('metadata',{}).get('stage')}, "
+          f"cands={len(state.get('metadata',{}).get('candidates', []))}, "
+          f"_awaiting={state.get('metadata',{}).get('_awaiting_worker')}")
+    return state
+
 @validate_node(name="MenuLookup", tags=["ordering","menu"], input_model=OrderInput, output_model=OrderOutput)
 def menu_lookup_node(state: Dict[str, Any]) -> Dict[str, Any]:
     print("[NODE] menu_lookup")
@@ -369,7 +430,6 @@ ORDER_VERBS = (
     "i want", "we'll have", "we will have", "order", "take"
 )
 
-@validate_node(name="TakeOrder", tags=["ordering","take"])
 @validate_node(name="TakeOrder", tags=["ordering","take"])
 def take_order_node(state: Dict[str, Any]) -> Dict[str, Any]:
     print("[NODE] take_order")
@@ -558,63 +618,80 @@ def confirm_order_node(state: Dict[str, Any]) -> Dict[str, Any]:
     _ensure_lists(state)
     md = state["metadata"]; msgs = state["messages"]
     cart = md.get("cart") or []
-    user_raw = msgs[-1]["content"].strip()
+    user_raw = (msgs[-1]["content"] if msgs else "").strip()
     signal = md.get("confirm_signal")
 
+    # If nothing to confirm, bounce back to take
     if not cart:
         md["stage"] = "take"
         msgs.append({"role":"assistant","content":"Your cart is empty — tell me what to add."})
+        md["_awaiting_worker"] = False
         state["messages"] = msgs
-        state["metadata"]["_awaiting_worker"] = False
         return state
 
-    # ✅ If router already set a confirm signal, honor it
-    if signal in {"confirm.yes", "confirm.no"}:
+    # --- 1) Strong yes/no first (no LLM) ---
+    lu = user_raw.lower()
+    YES = {"yes","y","yeah","yep","sure","ok","okay","confirm","place","proceed"}
+    NO  = {"no","n","nope","nah","cancel","change","not now"}
+    if signal in {"confirm.yes","confirm.no"}:
         decision = "yes" if signal == "confirm.yes" else "no"
+    elif lu in YES:
+        decision = "yes"
+    elif lu in NO:
+        decision = "no"
     else:
+        # --- 2) LLM only if needed ---
         try:
             parsed = generate_json(
-                system="""
-                You are a confirmation detector for a restaurant ordering agent.
-                Output JSON only.
-                Schema: {"decision": "yes"|"no"|"unclear"}
-                """,
+                system=(
+                    "You are a confirmation detector for a restaurant ordering agent.\n"
+                    'Return ONLY JSON: {"decision":"yes"|"no"|"unclear"}'
+                ),
                 user=user_raw,
-                schema_hint='{"decision":"yes"}',
-                max_tokens=5,
+                schema_hint='{"decision":"unclear"}',
+                max_tokens=8,
             )
-            decision = parsed.get("decision","unclear").lower()
-        except Exception as e:
-            print("[Confirm Parse Error]", e)
+            decision = str(parsed.get("decision","unclear")).lower()
+        except Exception:
             decision = "unclear"
 
+    # --- 3) Act on decision ---
     if decision == "yes":
         order = {
             "session_id": state["session_id"],
             "ts": int(time.time()),
             "items": cart,
-            "total": sum(it["price"] * it.get("qty", 1) for it in cart),
+            "total": sum(int(it.get("price",0)) * int(it.get("qty",1)) for it in cart),
             "status": "PLACED",
         }
         order_id = send_order_to_kitchen(order)
+        order["order_id"] = order_id
+        md["last_order"] = order  # keep for payment/bill
         msgs.append({"role":"assistant",
-                     "content": f"✅ Order placed! Total: ₹{order['total']}. Your order id ends with ...{order_id}."})
-        md.update({"confirmed": False, "stage": None, "cart": [], "route": None})
+                     "content": f"✅ Order placed! Total: ₹{order['total']}. Your order id ends with ...{order_id}."
+                                "\nWould you like to see the **bill**, **split** it, or **pay now**?"})
+        # prime payment path for next message
+        md["route"] = "payment"
+        md["stage"] = "bill"     # optional: marks we're at billing context
+        # clear the cart ONLY after placing the order
+        md.update({"confirmed": False, "cart": []})
+        # (do NOT set route=None here anymore)
+        md["_awaiting_worker"] = False
         state["messages"] = msgs
-        state["metadata"]["_awaiting_worker"] = False
         return state
 
     if decision == "no":
         md["confirmed"] = False
         md["stage"] = "take"
+        # do NOT clear cart here — user may edit it
         msgs.append({"role":"assistant","content":"No worries. Tell me what to add/remove or change quantities."})
+        md["_awaiting_worker"] = False
         state["messages"] = msgs
-        state["metadata"]["_awaiting_worker"] = False
         return state
 
-    # unclear
+    # unclear → stay in confirm, cart unchanged
     md["stage"] = "confirm"
     msgs.append({"role":"assistant","content":"Please reply with 'yes' to place the order, or 'no' to modify."})
+    md["_awaiting_worker"] = False
     state["messages"] = msgs
-    state["metadata"]["_awaiting_worker"] = False
     return state

@@ -45,12 +45,11 @@ def _ollama_generate(prompt: str, max_tokens: int, *, json_mode: bool = False) -
         return ""
 
 def generate_waiter(system: str, context_menu: str, user: str, max_tokens: int = 128) -> str:
-    prompt = (
-        f"{system}\n\nCONTEXT_MENU:\n{context_menu}\n\n"
-        f"User: {user}\nWaiter:"
-    )
-    out = _ollama_generate(prompt, max_tokens, json_mode=False)
-    return (out or "Here are some menu options. Please choose by number.")
+    prompt = f"{system}\n\nCONTEXT_MENU:\n{context_menu}\n\nUser: {user}\nWaiter:"
+    out = _ollama_generate(prompt, max_tokens, json_mode=False) or ""
+    # scrub common end tokens
+    out = re.sub(r"(?:</s>|<\|eot\|>|<eos>)+", "", out, flags=re.I).strip()
+    return out or "Here are some menu options. Please choose by number."
 
 
 def generate_json(system: str, user: str, schema_hint: str, max_tokens: int = 128) -> dict:
