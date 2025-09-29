@@ -72,5 +72,45 @@
     ],
     "total": 700.0,
     "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759105471,
+    "items": [
+      {
+        "id": "NM003",
+        "name": "Meen Vattichathu",
+        "price": 490.0,
+        "qty": 1
+      },
+      {
+        "id": "B001",
+        "name": "Idiyappam (3 pcs)",
+        "price": 165.0,
+        "qty": 3
+      }
+    ],
+    "total": 985.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759105586,
+    "items": [
+      {
+        "id": "NM005",
+        "name": "Yera Manga Kuzhambu",
+        "price": 490.0,
+        "qty": 1
+      },
+      {
+        "id": "NS007",
+        "name": "XO Prawns",
+        "price": 555.0,
+        "qty": 3
+      }
+    ],
+    "total": 2155.0,
+    "status": "PLACED"
   }
 ]
