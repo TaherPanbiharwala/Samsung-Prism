@@ -304,5 +304,21 @@
     ],
     "total": 850,
     "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759126545,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 2
+      }
+    ],
+    "total": 850,
+    "status": "PLACED"
   }
 ]
