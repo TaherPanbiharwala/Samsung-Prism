@@ -112,5 +112,197 @@
     ],
     "total": 2155.0,
     "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759109711,
+    "items": [
+      {
+        "id": "B006",
+        "name": "Garlic Naan",
+        "price": 85.0,
+        "category": "indian_breads",
+        "tags": "bread, naan, garlic",
+        "qty": 6
+      },
+      {
+        "id": "B014",
+        "name": "Butter Chicken Kulcha",
+        "price": 195.0,
+        "category": "indian_breads",
+        "tags": "bread, kulcha, butter chicken, stuffed",
+        "qty": 2
+      }
+    ],
+    "total": 900.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759109983,
+    "items": [
+      {
+        "id": "B006",
+        "name": "Garlic Naan",
+        "price": 85.0,
+        "category": "indian_breads",
+        "tags": "bread, naan, garlic",
+        "qty": 3
+      }
+    ],
+    "total": 255.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759110976,
+    "items": [
+      {
+        "id": "B006",
+        "name": "Garlic Naan",
+        "price": 85.0,
+        "category": "indian_breads",
+        "tags": "bread, naan, garlic",
+        "qty": 3
+      },
+      {
+        "id": "B014",
+        "name": "Butter Chicken Kulcha",
+        "price": 195.0,
+        "category": "indian_breads",
+        "tags": "bread, kulcha, butter chicken, stuffed",
+        "qty": 1
+      }
+    ],
+    "total": 450.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759118879,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 2
+      }
+    ],
+    "total": 850.0,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759119163,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 2
+      }
+    ],
+    "total": 850,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759119503,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 1
+      }
+    ],
+    "total": 425,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759119845,
+    "items": [
+      {
+        "id": "B006",
+        "name": "Garlic Naan",
+        "price": 85.0,
+        "category": "indian_breads",
+        "tags": "bread, naan, garlic",
+        "qty": 3
+      },
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 1
+      }
+    ],
+    "total": 680,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759119935,
+    "items": [
+      {
+        "id": "B001",
+        "name": "Idiyappam (3 pcs)",
+        "price": 165.0,
+        "category": "indian_breads",
+        "tags": "bread, south indian",
+        "qty": 1
+      }
+    ],
+    "total": 165,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759121274,
+    "items": [
+      {
+        "id": "R001",
+        "name": "Steamed Ponni Rice",
+        "price": 100.0,
+        "category": "indian_rice",
+        "tags": "rice, steamed",
+        "qty": 1
+      },
+      {
+        "id": "VM006",
+        "name": "Dal Tadka",
+        "price": 295.0,
+        "category": "main_course",
+        "tags": "vegetarian, main, dal, comfort, vegetarian",
+        "qty": 1
+      }
+    ],
+    "total": 395,
+    "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759122531,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 2
+      }
+    ],
+    "total": 850,
+    "status": "PLACED"
   }
 ]

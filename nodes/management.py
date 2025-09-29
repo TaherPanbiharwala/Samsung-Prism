@@ -1,6 +1,6 @@
 # nodes/management.py
 from utils.validation import validate_node
-from utils.llm import chat as llm_chat
+from utils.llm import generate_waiter as llm_chat
 from utils.config import USE_WAITER_LLM
 import traceback
 

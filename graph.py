@@ -1,93 +1,139 @@
 # graph.py
-from typing import Dict, Any
 from langgraph.graph import StateGraph, END
 from state import ChatStateTD
+
 from nodes.router import router_node
-from nodes.ordering import menu_lookup_node, take_order_node, confirm_order_node
-from nodes.management import chitchat_node
-from utils.validation import validate_node
+from nodes.ordering import (
+    menu_lookup_node, take_order_node, confirm_order_node, chitchat_node, om_router
+)
+from nodes.payment import (
+    bill_node, split_bill_node, payment_gateway_node, feedback_node, pm_router
+)
 
-ERROR_KEY = "_error"
+# ---------- manager subgraphs ----------
 
-@validate_node(name="ErrorNode", tags=["error"])
-def error_node(state: Dict[str, Any]) -> Dict[str, Any]:
-    err = state.get(ERROR_KEY, {})
-    node = err.get("node", "unknown")
-    where = err.get("where", "unknown")
-    msgs = state.get("messages", [])
-    msgs.append({
-        "role": "assistant",
-        "content": f"Sorry, something went wrong in {node} ({where}). A human will assist you shortly."
-    })
-    state["messages"] = msgs
-    state.pop(ERROR_KEY, None)
-    return state
+def build_ordering_manager():
+    g = StateGraph(state_schema=ChatStateTD)
 
-# graph.py
-def _route_from_router(state: Dict[str, Any]) -> str:
-    md    = state.get("metadata", {})
-    intent = (md.get("last_intent") or "").lower()
-    stage  = (md.get("stage") or "").lower()
-
-    # ✅ If a worker set an error, go to the error node immediately
-    if state.get(ERROR_KEY):
-        print("GRAPH ROUTE:", {"intent": intent, "stage": stage, "next": "error"})
-        return "error"
-
-    # ✅ End only AFTER a worker set the flag to False this invoke
-    if md.get("_awaiting_worker") is False:
-        md.pop("_awaiting_worker", None)  # reset for next turn
-        print("GRAPH ROUTE:", {"intent": intent, "stage": stage, "next": "__end__"})
-        return "__end__"
-
-    # otherwise choose a worker
-
-    elif intent in {"ordering.lookup", "ordering.more", "ordering.lookup_refine"}:
-        nxt = "menu_lookup"
-    elif intent == "ordering.take":
-        nxt = "take_order"
-    elif intent.startswith("confirm."):
-        nxt = "confirm_order"
-    else:
-        nxt = "chitchat"
-
-    print("GRAPH ROUTE:", {"intent": intent, "stage": stage, "next": nxt})
-    return nxt
-
-def build_graph():
-    g = StateGraph(ChatStateTD)
-
-    # nodes
-    g.add_node("router",        router_node)
-    g.add_node("menu_lookup",   menu_lookup_node)
-    g.add_node("take_order",    take_order_node)
+    # workers
+    g.add_node("menu_lookup", menu_lookup_node)
+    g.add_node("take_order", take_order_node)
     g.add_node("confirm_order", confirm_order_node)
-    g.add_node("chitchat",      chitchat_node)
-    g.add_node("error",         error_node)
+    g.add_node("chitchat", chitchat_node)
 
-    # entry
-    g.set_entry_point("router")
+    # entry = mini router (function om_router is imported)
+    g.add_node("om_router", lambda s: s)
+    g.set_entry_point("om_router")
 
-    # graph.py — keep exactly one of these blocks in the file
+    # route to workers or END
     g.add_conditional_edges(
-        "router",
-        _route_from_router,
+        "om_router",
+        om_router,
         {
-            "menu_lookup":   "menu_lookup",
-            "take_order":    "take_order",
+            "menu_lookup": "menu_lookup",
+            "take_order": "take_order",
             "confirm_order": "confirm_order",
-            "chitchat":      "chitchat",
-            "error":         "error",   # ← add this
-            "__end__":       END,
+            "chitchat": "chitchat",
+            END: END,
         },
     )
 
+    # ⛔ IMPORTANT: workers should END the subgraph (no loop-back)
+    g.add_edge("menu_lookup", END)
+    g.add_edge("take_order", END)
+    g.add_edge("confirm_order", END)
+    g.add_edge("chitchat", END)
 
-    # each worker -> router (router will then immediately return __end__)
-    for node in ["menu_lookup","take_order","confirm_order","chitchat"]:
-        g.add_edge(node, "router")
+    return g.compile()
 
-    # error -> END
+
+def build_payment_manager():
+    g = StateGraph(state_schema=ChatStateTD)
+
+    # workers
+    g.add_node("bill", bill_node)
+    g.add_node("split_bill", split_bill_node)
+    g.add_node("payment_gateway", payment_gateway_node)
+    g.add_node("feedback", feedback_node)
+
+    # entry = mini router
+    g.add_node("pm_router", lambda s: s)
+    g.set_entry_point("pm_router")
+
+    g.add_conditional_edges(
+        "pm_router",
+        pm_router,
+        {
+            "bill": "bill",
+            "split_bill": "split_bill",
+            "payment_gateway": "payment_gateway",
+            "feedback": "feedback",
+            END: END,
+        },
+    )
+
+    # ⛔ workers END the subgraph (no loop-back)
+    g.add_edge("bill", END)
+    g.add_edge("split_bill", END)
+    g.add_edge("payment_gateway", END)
+    g.add_edge("feedback", END)
+
+    return g.compile()
+
+# ---------- top-level graph ----------
+
+def _route_to_manager(state):
+    md = state.get("metadata", {})
+    last_intent = (md.get("last_intent") or "").lower()
+    route = (md.get("route") or "").lower()
+
+    if last_intent == "app.exit":
+        return END
+    if last_intent == "chitchat":
+        return "ordering_manager"
+    if route == "order":
+        return "ordering_manager"
+    if route == "payment":
+        return "payment_manager"
+    return "error"
+
+def error_node(state):
+    msgs = state.get("messages", [])
+    md = state.setdefault("metadata", {})
+    msgs.append({"role": "assistant", "content": "Sorry, I hit an error. Let’s start over."})
+    md["_awaiting_worker"] = False
+    state["messages"] = msgs
+    return state
+
+def build_graph():
+    ordering_manager = build_ordering_manager()
+    payment_manager  = build_payment_manager()
+
+    g = StateGraph(state_schema=ChatStateTD)
+
+    g.add_node("router", router_node)
+    g.add_node("ordering_manager", ordering_manager)
+    g.add_node("payment_manager", payment_manager)
+    g.add_node("error", error_node)
+
+    g.set_entry_point("router")
+
+    g.add_conditional_edges(
+        "router",
+        _route_to_manager,
+        {
+            "ordering_manager": "ordering_manager",
+            "payment_manager": "payment_manager",
+            "error": "error",
+            END: END,
+        },
+    )
+
+    # ⛔ REMOVE these to avoid same-turn loops:
+    # g.add_edge("ordering_manager", "router")
+    # g.add_edge("payment_manager", "router")
+
+    # error ends the turn
     g.add_edge("error", END)
 
     return g.compile()

@@ -101,12 +101,10 @@ def _cli_turn(m: ChatStateModel, text: str) -> ChatStateModel:
     return _handle_turn(m, text)
 
 # ---- entrypoint --------------------------------------------
+# ---- entrypoint --------------------------------------------
 if __name__ == "__main__":
-    # Always start clean for CLI/dev runs
     model = ChatStateModel(session_id="cli", messages=[], metadata={})
-    model.metadata["cart"] = []
-    model.metadata["candidates"] = []
-    model.metadata["confirmed"] = False
+    model.metadata.update({"cart": [], "candidates": [], "confirmed": False})
     model.metadata.pop("confirm_signal", None)
     ensure_system_prompt(model)
 
@@ -114,8 +112,12 @@ if __name__ == "__main__":
         text = _read_user()
         if text is None:
             continue
+
+        # 🔹 Quit commands (stop the CLI cleanly)
+        if text.strip().lower() in {"quit", "exit", "bye"}:
+            print("AI: 👋 Thanks for visiting! See you next time.")
+            break
+
         model = _cli_turn(model, text)
         if model.messages and model.messages[-1].role == "assistant":
             print("AI:", model.messages[-1].content)
-    # To run API instead:
-    # uvicorn.run(app, host="0.0.0.0", port=8000)
