@@ -1,79 +1,61 @@
 # utils/validation.py
-from functools import wraps
-from typing import Any, Callable, Type, Optional, Dict
-from langsmith import traceable
+from __future__ import annotations
+from typing import Any, Dict, Optional, Callable, List
 from pydantic import BaseModel, ValidationError
+from langsmith import traceable
 
-class NodeValidationError(RuntimeError):
-    def __init__(self, node_name: str, where: str, errors: Any, state_snapshot: Dict[str, Any]):
-        super().__init__(f"{node_name} {where} validation failed")
-        self.node_name = node_name
-        self.where = where
-        self.errors = errors
-        self.state_snapshot = state_snapshot
-
-def pmodel_dump(obj: Any) -> Dict[str, Any]:
-    # works for dicts and pydantic models
-    if hasattr(obj, "model_dump"):
-        return obj.model_dump()  # type: ignore[attr-defined]
-    return dict(obj)
+def _coerce_for_model(state: Dict[str, Any]) -> Dict[str, Any]:
+    # Coerce the state into an object compatible with our Input/Output models
+    return {
+        "session_id": state.get("session_id", ""),
+        "messages": state.get("messages", []) or [],
+        "metadata": state.get("metadata", {}) or {},
+    }
 
 def validate_node(
-    *,
     name: str,
-    input_model: Optional[Type[BaseModel]] = None,
-    output_model: Optional[Type[BaseModel]] = None,
-    error_key: str = "_error",
-    tags: Optional[list[str]] = None,
-) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    tags: Optional[List[str]] = None,
+    input_model: Optional[type[BaseModel]] = None,
+    output_model: Optional[type[BaseModel]] = None,
+) -> Callable[[Callable[..., Dict[str, Any]]], Callable[..., Dict[str, Any]]]:
     """
-    Wrap a node function(state_dict)->state_dict with:
-      - optional input validation (pydantic)
-      - optional output validation (pydantic)
-      - LangSmith nested tracing
-      - transform exceptions into structured error in state
+    Decorator that:
+      - accepts LangGraph's extra kwargs (e.g., config)
+      - optionally validates state against Pydantic models
+      - traces with LangSmith
     """
-    def decorator(fn: Callable[..., Any]) -> Callable[..., Any]:
-        @traceable(name=f"{name}", tags=tags or [])
-        @wraps(fn)
-        def wrapper(state: Dict[str, Any]) -> Dict[str, Any]:
-            # Validate input
+    tags = tags or []
+
+    def decorator(fn: Callable[..., Dict[str, Any]]) -> Callable[..., Dict[str, Any]]:
+        @traceable(name=name, tags=tags)
+        def wrapper(state: Dict[str, Any], *args, **kwargs) -> Dict[str, Any]:
+            # LangGraph may pass 'config', 'abort', etc. in **kwargs; we just ignore them
             if input_model is not None:
                 try:
-                    input_model.model_validate(pmodel_dump(state))
+                    input_model(**_coerce_for_model(state))
                 except ValidationError as ve:
-                    # attach error details to state and short-circuit
-                    state[error_key] = {
+                    # surface a readable error and short-circuit this node
+                    state.setdefault("_error", {})
+                    state["_error"] = {
                         "node": name,
-                        "where": "input",
-                        "errors": ve.errors(),
+                        "where": "input_validation",
+                        "errors": [e.model_dump() for e in ve.errors()] if hasattr(ve, "errors") else str(ve),
                     }
                     return state
 
-            # Execute node
-            try:
-                out_state = fn(state)
-            except Exception as e:
-                # capture runtime error
-                state[error_key] = {
-                    "node": name,
-                    "where": "runtime",
-                    "errors": [{"msg": str(e), "type": e.__class__.__name__}],
-                }
-                return state
+            out = fn(state, *args, **kwargs)  # <-- forward any kwargs (e.g., config)
 
-            # Validate output
             if output_model is not None:
                 try:
-                    output_model.model_validate(pmodel_dump(out_state))
+                    output_model(**_coerce_for_model(out))
                 except ValidationError as ve:
-                    out_state[error_key] = {
+                    out.setdefault("_error", {})
+                    out["_error"] = {
                         "node": name,
-                        "where": "output",
-                        "errors": ve.errors(),
+                        "where": "output_validation",
+                        "errors": [e.model_dump() for e in ve.errors()] if hasattr(ve, "errors") else str(ve),
                     }
-                    return out_state
+            return out
 
-            return out_state
         return wrapper
     return decorator

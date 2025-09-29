@@ -1,51 +1,35 @@
 # main.py
+import os
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import cast
+from typing import cast, Optional
 from dotenv import load_dotenv
 from langsmith import traceable
 
-from nodes.router import route_intent_text
+from utils.nlu import classify
+from utils.config import SYSTEM_PROMPT
 from graph import build_graph
-from state import ChatStateModel, MessageModel, ChatStateTD, to_graph_state, from_graph_state
+from state import (
+    ChatStateModel,
+    MessageModel,
+    ChatStateTD,
+    to_graph_state,
+    from_graph_state,
+)
 from utils import db
 
-load_dotenv()  # make sure .env is loaded for tracing
-
-SYSTEM_PROMPT = (
-    "You are an **agentic restaurant waiter AI**. "
-    "Your job is to greet guests, answer menu questions, take orders, and interact naturally like a human waiter. "
-    "Always stay polite, brief, and conversational.\n\n"
-    "=== ROLE & BEHAVIOR ===\n"
-    "- Start with a warm greeting, introduce yourself as the waiter, and ask the customer's name/occasion.\n"
-    "- Speak in short, friendly turns (<120 words).\n"
-    "- Never break character as a waiter.\n"
-    "- Be helpful but concise. Do not overwhelm customers with menu details unless asked.\n\n"
-    "=== HARD RULES ===\n"
-    "1) DO NOT invent menu items, drinks, specials, or prices.\n"
-    "2) Only reference items in `CONTEXT_MENU` or confirmed by POS/inventory.\n"
-    "3) If a customer requests something not in `CONTEXT_MENU`, reply:\n"
-    '   "We don\'t have that. Here are similar options:" and suggest top matches.\n'
-    "4) For prices or availability, always rely on POS/inventory. If unknown, say you’ll check.\n"
-    "5) If allergens conflict with customer state, confirm and propose safe alternatives.\n"
-    "6) If order placement, confirmation, or payment is requested but the cart is empty/incomplete, "
-    "explain what’s missing first.\n"
-    "7) When recommending dishes, include snippet IDs like [ID] only if provided in context.\n"
-    "8) Use multilingual tone if needed, but keep responses natural and brand-aligned.\n\n"
-    "=== CAPABILITIES ===\n"
-    "- Handle both chat and voice inputs.\n"
-    "- Support personalized recommendations based on history/preferences.\n"
-    "- Integrate with POS/kitchen for speed and accuracy.\n"
-    "- Ensure upselling/cross-selling is natural and not pushy.\n"
-    "- Respect dietary restrictions and provide safe suggestions.\n"
-)
+# ---- startup / env -----------------------------------------
+load_dotenv()  # ensure .env is loaded for tracing, chroma, etc.
+print("[CFG] USE_WAITER_LLM =", os.getenv("USE_WAITER_LLM"))
+print("[CFG] WAITER_LLM_BACKEND =", os.getenv("WAITER_LLM_BACKEND"))
 
 def ensure_system_prompt(model: ChatStateModel) -> None:
-    """Insert system prompt once per session if missing (covers old Redis sessions too)."""
+    """Insert system prompt once per session if missing (covers old stored sessions too)."""
     if not any(m.role == "system" for m in model.messages):
         model.messages.insert(0, MessageModel(role="system", content=SYSTEM_PROMPT))
 
+# ---- app / graph -------------------------------------------
 app = FastAPI()
 graph_app = build_graph()
 
@@ -53,48 +37,85 @@ class ChatRequest(BaseModel):
     session_id: str
     user_message: str
 
-@traceable(name="POST /chat", tags=["api","phase1"])
+@traceable(name="POST /chat", tags=["api", "phase1"])
 def _handle_turn(model: ChatStateModel, user_text: str) -> ChatStateModel:
-    # Ensure persona/system rules are present on every turn
+    # normalize & ignore empty user_text
+    user_text = (user_text or "").strip()
+    if not user_text:
+        # no change to model; caller can decide how to respond
+        return model
+
+    # make sure system prompt exists
     ensure_system_prompt(model)
 
-    # (Optional) local intent detection for analytics; graph still routes
-    _ = route_intent_text(user_text)
+    # (optional) quick NLU call for trace visibility
+    stage = model.metadata.get("stage")
+    _ = classify(user_text, stage=stage, history=[m.model_dump() for m in model.messages][-4:])
 
-    # Append user message and invoke graph
+    # record user msg
     model.messages.append(MessageModel(role="user", content=user_text))
+
+    # start-of-turn guard for router/graph
+    model.metadata["_awaiting_worker"] = True
+
+    # run graph
     out_dict = graph_app.invoke(to_graph_state(model))
     model = from_graph_state(cast(ChatStateTD, out_dict))
     return model
 
+# ---- HTTP endpoint -----------------------------------------
 @app.post("/chat")
 def chat_endpoint(req: ChatRequest):
     model = db.load_state(req.session_id) or ChatStateModel(session_id=req.session_id)
     ensure_system_prompt(model)
-    model = _handle_turn(model, req.user_message)
-    db.save_state(req.session_id, model.model_dump())
-    return {"response": model.messages[-1].content}
 
+    # Handle turn (will ignore blank user_message safely)
+    model = _handle_turn(model, req.user_message)
+
+    # If blank input, reply with a gentle nudge
+    if not (req.user_message or "").strip():
+        # only add a reply if the graph didn’t already respond
+        if not model.messages or model.messages[-1].role != "assistant":
+            model.messages.append(
+                MessageModel(role="assistant", content="(please type a message)")
+            )
+
+    db.save_state(req.session_id, model.model_dump())
+    return {"response": model.messages[-1].content if model.messages else ""}
+
+# ---- CLI helpers -------------------------------------------
+# ---- CLI helpers -------------------------------------------
+def _read_user() -> Optional[str]:
+    try:
+        s = input("You: ")
+    except EOFError:
+        return None
+    s = (s or "").strip()
+    if not s:
+        print("(ignored empty input)")
+        return None
+    return s
+
+@traceable(name="terminal_turn", tags=["cli", "phase1"])
+def _cli_turn(m: ChatStateModel, text: str) -> ChatStateModel:
+    return _handle_turn(m, text)
+
+# ---- entrypoint --------------------------------------------
 if __name__ == "__main__":
-    session = "test-session"
-    model = db.load_state(session) or ChatStateModel(session_id=session)
+    # Always start clean for CLI/dev runs
+    model = ChatStateModel(session_id="cli", messages=[], metadata={})
+    model.metadata["cart"] = []
+    model.metadata["candidates"] = []
+    model.metadata["confirmed"] = False
+    model.metadata.pop("confirm_signal", None)
     ensure_system_prompt(model)
 
-    @traceable(name="terminal_turn", tags=["cli","phase1"])
-    def _cli_turn(m: ChatStateModel, text: str) -> ChatStateModel:
-        ensure_system_prompt(m)
-        return _handle_turn(m, text)
-
     while True:
-        try:
-            text = input("You: ")
-        except (EOFError, KeyboardInterrupt):
-            break
-        if text.lower() in {"quit", "exit"}:
-            break
+        text = _read_user()
+        if text is None:
+            continue
         model = _cli_turn(model, text)
-        db.save_state(session, model.model_dump())
-        print("AI:", model.messages[-1].content)
-
-    # To run API instead of CLI loop:
+        if model.messages and model.messages[-1].role == "assistant":
+            print("AI:", model.messages[-1].content)
+    # To run API instead:
     # uvicorn.run(app, host="0.0.0.0", port=8000)
