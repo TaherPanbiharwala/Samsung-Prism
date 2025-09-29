@@ -135,14 +135,13 @@ def _regex_parse_updates(text: str) -> List[Dict[str, Any]]:
             merged[key] = it
     return list(merged.values())
 
-def _norm_tokens(s: str) -> List[str]:
-    if not s:
-        return []
-    s = s.lower()
+def _norm_tokens(s: str):
+    if not s: return []
+    s = s.lower().strip()
     table = str.maketrans("", "", string.punctuation)
     s = s.translate(table)
     toks = [t for t in s.split() if t not in {"and","with","of","the","a","an"}]
-    # naive singularize
+    # very light stemming
     out = []
     for t in toks:
         if len(t) > 3 and t.endswith("es"):
@@ -153,27 +152,61 @@ def _norm_tokens(s: str) -> List[str]:
             out.append(t)
     return out
 
+def _exact_match(name: str, pool: list[dict]) -> dict | None:
+    """Case-insensitive whole-name equality."""
+    target = name.strip().lower()
+    for c in pool or []:
+        if c.get("name","").strip().lower() == target:
+            return c
+    return None
+
 def _score_match(qname: str, cand_name: str) -> float:
-    qt = set(_norm_tokens(qname))
-    ct = set(_norm_tokens(cand_name))
+    """Base overlap score + bonuses/penalties:
+       - exact equality gets a big bonus
+       - extra tokens in candidate are penalized
+       - whole-phrase containment gets a small bonus
+    """
+    if not qname or not cand_name:
+        return 0.0
+    qn = qname.strip().lower()
+    cn = cand_name.strip().lower()
+    if qn == cn:
+        return 3.0  # hard-prefer exact equality
+
+    qt = _norm_tokens(qname)
+    ct = _norm_tokens(cand_name)
     if not qt or not ct:
         return 0.0
-    inter = qt & ct
-    score = len(inter) / max(1, len(qt))
-    # small bonus for substring containment
-    if qname.lower() in cand_name.lower() or cand_name.lower() in qname.lower():
-        score += 0.25
+
+    inter = set(qt) & set(ct)
+    # overlap proportion
+    score = len(inter) / max(1, len(set(qt)))
+
+    # small bonus if whole phrase appears
+    if f" {qn} " in f" {cn} ":
+        score += 0.15
+
+    # penalize extra tokens in candidate (push "Butter Chicken" over "... Kulcha")
+    extra = max(0, len(ct) - len(qt))
+    score -= 0.08 * extra
+
+    # tiny n-gram closeness bonus: closer lengths win ties
+    score -= 0.02 * abs(len(ct) - len(qt))
+
     return score
 
-def _best_menu_match(name: str, pool: List[Dict[str,Any]]) -> Optional[Dict[str,Any]]:
-    best = None
-    best_score = 0.0
+def _best_menu_match(name: str, pool: list[dict]) -> dict | None:
+    # try exact first
+    em = _exact_match(name, pool)
+    if em:
+        return em
+    # then fuzzy
+    best, best_score = None, 0.0
     for c in pool or []:
         s = _score_match(name, c.get("name",""))
         if s > best_score:
-            best_score = s
-            best = c
-    return best if best_score >= 0.45 else None  # threshold tuned a bit lower
+            best_score, best = s, c
+    return best if best_score >= 0.45 else None
 
 def _ensure_lists(state: Dict[str, Any]):
     md = state.setdefault("metadata", {})
@@ -337,6 +370,7 @@ ORDER_VERBS = (
 )
 
 @validate_node(name="TakeOrder", tags=["ordering","take"])
+@validate_node(name="TakeOrder", tags=["ordering","take"])
 def take_order_node(state: Dict[str, Any]) -> Dict[str, Any]:
     print("[NODE] take_order")
     _ensure_lists(state)
@@ -353,9 +387,30 @@ def take_order_node(state: Dict[str, Any]) -> Dict[str, Any]:
             cands = []
     cand_names = [c["name"] for c in (cands or [])]
 
-    # ---- Ask LLM for structured cart updates ----
-    schema_hint = '{"items":[{"name":"Butter Chicken","qty":1,"action":"add"}]}'
-    system = f"""
+    # ------------------------------------------------------------------
+    # STEP 1: Regex-first for remove/delete — prevents LLM hallucinations
+    # ------------------------------------------------------------------
+    import re, string
+
+    items: List[Dict[str, Any]] = []
+    rm_items: List[Dict[str, Any]] = []
+    for m in re.finditer(r"\b(remove|delete|rm)\s+(?:(\d+)\s+)?([a-zA-Z][\w\s\-&]+)", user_raw, re.I):
+        qty_str = m.group(2)
+        name_str = m.group(3).strip()
+        rm_items.append({
+            "name": name_str,
+            "qty": int(qty_str) if qty_str else None,   # None => remove the whole line
+            "action": "remove",
+        })
+
+    if rm_items:
+        items = rm_items
+    else:
+        # --------------------------------------------------------------
+        # STEP 2: LLM JSON only if no regex remove matched
+        # --------------------------------------------------------------
+        schema_hint = '{"items":[{"name":"Butter Chicken","qty":1,"action":"add"}]}'
+        system = f"""
 You are a cart update extractor for a restaurant ordering agent.
 Return ONLY JSON (no code fences, no prose).
 Schema: {schema_hint}
@@ -365,38 +420,20 @@ Rules:
 - Prefer dish names close to these candidates: {cand_names}.
 - If nothing found, return {{"items":[]}}.
 """
+        parsed = {}
+        try:
+            parsed = generate_json(system=system, user=user_raw, schema_hint='{"items":[]}', max_tokens=128)
+        except Exception as e:
+            print("[Order Parse Error]", e)
+        print("[DEBUG parsed LLM JSON]", parsed)
+        items = parsed.get("items") or []
 
-    parsed = {}
-    try:
-        parsed = generate_json(system=system, user=user_raw, schema_hint='{"items":[]}', max_tokens=128)
-    except Exception as e:
-        print("[Order Parse Error]", e)
-    print("[DEBUG parsed LLM JSON]", parsed)
-
-    items = parsed.get("items") or []
-
-    # ---- Quick fallback parser for 'remove ...' utterances ----
-    # Handles: "remove butter chicken", "delete 1 naan", "rm 2 garlic naans"
-    if not items:
-        import re
-        rm_items = []
-        for m in re.finditer(r"\b(remove|delete|rm)\s+(?:(\d+)\s+)?([a-zA-Z][\w\s\-&]+)", user_raw, re.I):
-            qty_str = m.group(2)
-            name_str = m.group(3).strip()
-            # If no qty given for remove → remove ALL of that item
-            rm_items.append({"name": name_str, "qty": int(qty_str) if qty_str else None, "action": "remove"})
-        if rm_items:
-            items = rm_items
-
-    # —— Fallback when still nothing —— #
-    if not items:
-        menu_pool = (cands or []) or rag.search_menu("popular", top_k=145)
-        items = _fallback_extract_items(user_raw, menu_pool)
-
-    added, removed, changed = [], [], []
+        # ---- STEP 2b: Fallback when still nothing ----
+        if not items:
+            menu_pool = (cands or []) or rag.search_menu("popular", top_k=145)
+            items = _fallback_extract_items(user_raw, menu_pool)
 
     # ---- Fuzzy matching helpers ----
-    import string
     def _norm_tokens(s: str):
         if not s: return []
         s = s.lower()
@@ -431,30 +468,37 @@ Rules:
                 best_score, best = s, c
         return best if best_score >= 0.45 else None
 
-    # ---- Apply items ----
+    # ---- Apply items to cart ----
+    added, removed, changed = [], [], []
     for it in items:
         try:
             name = str(it.get("name","")).strip()
             if not name:
                 continue
             action = (it.get("action","add") or "add").lower()
+
             qty_val = it.get("qty", 1)
-            qty = int(qty_val) if isinstance(qty_val, (int, str)) and str(qty_val).isdigit() else None
+            qty = None
+            if isinstance(qty_val, int):
+                qty = qty_val
+            elif isinstance(qty_val, str) and qty_val.isdigit():
+                qty = int(qty_val)
 
-            # Try candidates → global → targeted search
-            menu_item = _best_menu_match(name, cands) or rag.find_by_name(name)
-            if not menu_item:
-                try:
-                    hits = rag.search_menu(name, top_k=10)
-                except Exception:
-                    hits = []
-                menu_item = _best_menu_match(name, hits)
-
+            # Candidates → global → targeted
+            # Try candidates first (exact → fuzzy), then global (exact → fuzzy)
+            menu_item = (
+                _exact_match(name, cands)
+                or _best_menu_match(name, cands)
+                or _exact_match(name, rag.search_menu(name, top_k=20))
+                or _best_menu_match(name, rag.search_menu(name, top_k=20))
+            )
             if not menu_item:
                 print("[WARN] no menu match for", name)
                 continue
 
-            existing = next((x for x in md["cart"] if x["name"].lower() == menu_item["name"].lower()), None)
+            # Normalize exact name used in cart
+            exact_name = menu_item["name"].lower()
+            existing = next((x for x in md["cart"] if x["name"].lower() == exact_name), None)
 
             if action == "add":
                 eff_qty = qty if qty is not None else 1
@@ -469,10 +513,11 @@ Rules:
 
             elif action == "remove":
                 if not existing:
-                    # nothing to remove
+                    # Not in cart; make that explicit for UX (optional)
+                    removed.append(f"{menu_item['name']} (not in cart)")
                     continue
                 if qty is None:
-                    # no qty provided → remove the whole line
+                    # Remove entire line
                     md["cart"].remove(existing)
                     removed.append(menu_item["name"])
                 else:

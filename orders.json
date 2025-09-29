@@ -152,5 +152,29 @@
     ],
     "total": 255.0,
     "status": "PLACED"
+  },
+  {
+    "session_id": "cli",
+    "ts": 1759110976,
+    "items": [
+      {
+        "id": "B006",
+        "name": "Garlic Naan",
+        "price": 85.0,
+        "category": "indian_breads",
+        "tags": "bread, naan, garlic",
+        "qty": 3
+      },
+      {
+        "id": "B014",
+        "name": "Butter Chicken Kulcha",
+        "price": 195.0,
+        "category": "indian_breads",
+        "tags": "bread, kulcha, butter chicken, stuffed",
+        "qty": 1
+      }
+    ],
+    "total": 450.0,
+    "status": "PLACED"
   }
 ]
