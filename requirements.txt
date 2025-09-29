@@ -1,0 +1,47 @@
+#Core LLM + LangGraph
+langgraph
+langgraph-prebuilt
+langgraph-sdk
+langgraph-checkpoint-sqlite
+langsmith
+langchain-community
+langchain-core
+tavily-python
+langgraph-cli[inmem]
+ollama
+transformers
+sentence-transformers
+tiktoken
+
+# ASR + TTS (Voice Hooks)
+vosk
+coqui-tts
+edge-tts
+
+# Vector DB / RAG
+chromadb
+
+# --- Optional infra (comment out if unused) ---
+redis
+SQLAlchemy
+
+# API / Backend
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+requests
+
+# --- Streamlit demo UI (with live audio) ---
+streamlit
+streamlit-webrtc
+aiortc
+av
+pydub
+
+# Utilities
+python-dotenv
+requests
+
+# Deployment
+docker

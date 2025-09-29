@@ -320,5 +320,21 @@
     ],
     "total": 850,
     "status": "PLACED"
+  },
+  {
+    "session_id": "streamlit",
+    "ts": 1759156585,
+    "items": [
+      {
+        "id": "NS008",
+        "name": "Chicken Tikka",
+        "price": 425.0,
+        "category": "starters",
+        "tags": "non-vegetarian, starter, chicken, tandoor, non_vegetarian",
+        "qty": 2
+      }
+    ],
+    "total": 850,
+    "status": "PLACED"
   }
 ]
